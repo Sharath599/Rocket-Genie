@@ -1,300 +1,805 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Rocket Genie - Social Media Optimization</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Rocket Genie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-soft: #eef2ff;
+      --bg: #0f172a;
+      --card-bg: #111827;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --danger: #ef4444;
+    }
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
 
-        body {
-            background: #f5f6fa;
-        }
+    .app-shell {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(145deg, #020617, #020617);
+      border-radius: 20px;
+      border: 1px solid #1f2937;
+      box-shadow:
+        0 22px 50px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(148, 163, 184, 0.08);
+      padding: 28px 24px 48px;
+      position: relative;
+      overflow: hidden;
+    }
 
-        /* Header */
-        header {
-            background: white;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(129, 140, 248, 0.2), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(56, 189, 248, 0.18), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
 
-        .logo {
-            font-weight: 700;
-            font-size: 22px;
-            color: #2c3e50;
-        }
+    .app-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+    }
 
-        .nav-btns button {
-            padding: 8px 18px;
-            margin-left: 10px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-        }
+    @media (max-width: 800px) {
+      .app-shell {
+        padding: 20px 16px 64px;
+      }
+      .app-content {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
 
-        .login-btn {
-            background: #ddd;
-        }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-        .signup-btn {
-            background: #2ecc71;
-            color: white;
-        }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px 4px 4px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      width: fit-content;
+      backdrop-filter: blur(16px);
+    }
 
-        /* Hero Section */
-        .hero {
-            height: 400px;
-            background: linear-gradient(to right, #2c3e50, #3498db);
-            color: white;
-            display: flex;
-            align-items: center;
-            padding: 60px;
-        }
+    .badge-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #f9fafb, #22c55e);
+      box-shadow:
+        0 0 0 2px rgba(34, 197, 94, 0.35),
+        0 0 18px rgba(34, 197, 94, 0.7);
+    }
 
-        .hero h1 {
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
+    .title {
+      font-size: clamp(2.1rem, 3vw, 2.6rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
 
-        .hero p {
-            font-size: 18px;
-        }
+    .title span.highlight {
+      background: linear-gradient(120deg, #a855f7, #6366f1, #22d3ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
 
-        /* Stats Section */
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            padding: 40px;
-            background: white;
-        }
+    .subtitle {
+      color: var(--text-muted);
+      max-width: 480px;
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
 
-        .card {
-            text-align: center;
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 15px;
-            width: 180px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+    .highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
 
-        .card h2 {
-            color: #3498db;
-        }
+    .pill {
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
 
-        /* CTA Section */
-        .cta {
-            background: #1b1464;
-            color: white;
-            text-align: center;
-            padding: 50px;
-        }
+    .pill strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
 
-        .cta h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 18px;
+    }
 
-        .cta button {
-            background: #ff4757;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
+    .stat-card {
+      min-width: 120px;
+      border-radius: 16px;
+      padding: 10px 12px;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), transparent 60%);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      backdrop-filter: blur(12px);
+    }
 
-        /* Chatbot Button */
-        .chat-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #3498db;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            font-size: 26px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
 
-        /* Chat Window */
-        .chatbox {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 320px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-        }
+    .stat-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
 
-        .chat-header {
-            background: #3498db;
-            color: white;
-            padding: 12px;
-            text-align: center;
-            font-weight: 600;
-        }
+    .stat-footnote {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
-        .chat-body {
-            height: 300px;
-            padding: 10px;
-            overflow-y: auto;
-            font-size: 14px;
-        }
+    .mock-card {
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.25), transparent 60%);
+      padding: 16px 14px 14px;
+      box-shadow:
+        0 18px 38px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(148, 163, 184, 0.15);
+    }
 
-        .chat-input {
-            display: flex;
-            border-top: 1px solid #ddd;
-        }
+    .mock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
 
-        .chat-input input {
-            flex: 1;
-            border: none;
-            padding: 10px;
-            outline: none;
-        }
+    .mock-app-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-        .chat-input button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-        }
+    .mock-mode {
+      font-size: 0.8rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      color: var(--text-muted);
+    }
 
-        .bot-message {
-            background: #ecf0f1;
-            padding: 8px 12px;
-            border-radius: 10px;
-            margin: 5px 0;
-            max-width: 80%;
-        }
+    .mock-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
 
-        .user-message {
-            background: #3498db;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 10px;
-            margin: 5px 0;
-            max-width: 80%;
-            align-self: flex-end;
-        }
-    </style>
+    .mock-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mock-row-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+    }
+
+    .mock-footer {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .mock-tag {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    /* Chat widget */
+
+    .chat-toggle-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      background: radial-gradient(circle at 30% 0, #e0f2fe, #2563eb);
+      box-shadow:
+        0 10px 22px rgba(15, 23, 42, 0.8),
+        0 0 0 2px rgba(37, 99, 235, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 30;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.2s ease;
+      color: #eff6ff;
+    }
+
+    .chat-toggle-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow:
+        0 14px 28px rgba(15, 23, 42, 0.95),
+        0 0 0 2px rgba(37, 99, 235, 0.9);
+    }
+
+    .chat-toggle-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .chat-toggle-icon {
+      width: 26px;
+      height: 26px;
+      position: relative;
+    }
+
+    .chat-toggle-icon::before,
+    .chat-toggle-icon::after {
+      content: "";
+      position: absolute;
+      border-radius: 6px;
+      background: currentColor;
+    }
+
+    .chat-toggle-icon::before {
+      inset: 3px 2px 6px 2px;
+      border-bottom-right-radius: 2px;
+    }
+
+    .chat-toggle-icon::after {
+      width: 12px;
+      height: 10px;
+      transform: rotate(45deg);
+      right: 6px;
+      bottom: 3px;
+    }
+
+    .chat-widget {
+      position: fixed;
+      right: 20px;
+      bottom: 90px;
+      width: 320px;
+      max-width: 96vw;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform-origin: bottom right;
+      transform: scale(0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+      z-index: 40;
+    }
+
+    .chat-widget.open {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .chat-header {
+      padding: 10px 12px;
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.4), rgba(15, 23, 42, 0.98));
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #fee2e2, #f97316);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: #111827;
+      font-weight: 700;
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.9);
+    }
+
+    .chat-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-title-main {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .chat-title-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .chat-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+      margin-left: auto;
+    }
+
+    .chat-close-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 999px;
+      transition: background 0.16s ease, color 0.16s ease;
+    }
+
+    .chat-close-btn:hover {
+      background: rgba(15, 23, 42, 0.7);
+      color: #e5e7eb;
+    }
+
+    .chat-messages {
+      padding: 10px 10px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(75, 85, 99, 0.9) transparent;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.95), #020617);
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background-color: rgba(75, 85, 99, 0.9);
+      border-radius: 999px;
+    }
+
+    .chat-message-row {
+      display: flex;
+      gap: 6px;
+      align-items: flex-end;
+    }
+
+    .chat-message-row.bot {
+      justify-content: flex-start;
+    }
+
+    .chat-message-row.user {
+      justify-content: flex-end;
+    }
+
+    .chat-message-bubble {
+      max-width: 80%;
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .chat-message-bubble.bot {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      border-bottom-left-radius: 2px;
+    }
+
+    .chat-message-bubble.user {
+      background: linear-gradient(135deg, #4f46e5, #22c55e);
+      border-bottom-right-radius: 2px;
+      color: #f9fafb;
+    }
+
+    .chat-message-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chat-input-area {
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 6px 8px;
+      background: rgba(15, 23, 42, 0.98);
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      padding: 7px 11px;
+      font-size: 0.82rem;
+      background: #020617;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .chat-input::placeholder {
+      color: #6b7280;
+    }
+
+    .chat-input:focus {
+      border-color: rgba(99, 102, 241, 0.9);
+      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6);
+      background: #020617;
+    }
+
+    .chat-send-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: linear-gradient(130deg, #4f46e5, #22c55e);
+      color: #f9fafb;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow:
+        0 8px 18px rgba(15, 23, 42, 0.8),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+      white-space: nowrap;
+    }
+
+    .chat-send-btn:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 10px 22px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 1);
+    }
+
+    .chat-send-btn:active {
+      transform: translateY(0);
+      opacity: 0.9;
+    }
+
+    .chat-send-btn[disabled] {
+      opacity: 0.45;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .chat-error {
+      font-size: 0.72rem;
+      color: var(--danger);
+      padding: 0 10px 4px;
+      min-height: 14px;
+    }
+
+    @media (max-width: 500px) {
+      .chat-widget {
+        right: 12px;
+        bottom: 86px;
+        width: calc(100vw - 24px);
+      }
+      .chat-toggle-btn {
+        right: 12px;
+        bottom: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="app-shell">
+    <div class="app-content">
+      <section class="hero">
+        <div class="badge">
+          <div class="badge-dot"></div>
+          <span>Rocket Genie is live · AI copilots for your workflows</span>
+        </div>
+        <h1 class="title">
+          Meet <span class="highlight">Rocket Genie</span>,<br />
+          your on‑page AI ops assistant.
+        </h1>
+        <p class="subtitle">
+          A clean, embedded chatbot that helps your users support, explore, and automate — directly
+          inside your web app. No frameworks required, just modern HTML, CSS, and JavaScript.
+        </p>
+        <div class="highlights">
+          <div class="pill"><strong>Instant setup</strong> · drop in one file</div>
+          <div class="pill"><strong>Responsive</strong> · works on desktop &amp; mobile</div>
+          <div class="pill"><strong>Bottom‑right widget</strong> · modern chat UI</div>
+        </div>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">Avg. response time</div>
+            <div class="stat-value">&lt; 1.2s</div>
+            <div class="stat-footnote">Simulated replies for this demo</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Session uplift</div>
+            <div class="stat-value">+34%</div>
+            <div class="stat-footnote">When chat is enabled</div>
+          </div>
+        </div>
+      </section>
 
-<header>
-    <div class="logo">Rocket Genie</div>
-    <div class="nav-btns">
-        <button class="login-btn">Log In</button>
-        <button class="signup-btn">Sign Up</button>
+      <aside class="mock-card">
+        <div class="mock-header">
+          <div class="mock-app-name">
+            <span style="display:inline-flex;width:10px;height:10px;border-radius:999px;background:#22c55e;box-shadow:0 0 10px rgba(34,197,94,0.8);"></span>
+            Demo conversation
+          </div>
+          <div class="mock-mode">Preview</div>
+        </div>
+        <div class="mock-rows">
+          <div class="mock-row">
+            <div class="mock-row-dot"></div>
+            <span>“Hello! I'm Rocket Genie 🚀 How can I help you?”</span>
+          </div>
+          <div class="mock-row">
+            <div class="mock-row-dot" style="background:#6366f1;box-shadow:0 0 10px rgba(99,102,241,0.9);"></div>
+            <span>“Can you summarize today’s ops status?”</span>
+          </div>
+          <div class="mock-row">
+            <div class="mock-row-dot"></div>
+            <span>“You have 3 tasks queued and 1 deployment in progress.”</span>
+          </div>
+        </div>
+        <div class="mock-footer">
+          <span>Try the live widget in the corner.</span>
+          <span class="mock-tag">Bottom‑right chat · fixed</span>
+        </div>
+      </aside>
     </div>
-</header>
+  </div>
 
-<section class="hero">
-    <div>
-        <h1>Social Media Optimization</h1>
-        <p>Introduction to Social Media - Certified Experts</p>
+  <!-- Chat toggle button -->
+  <button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open Rocket Genie chat">
+    <div class="chat-toggle-icon" aria-hidden="true"></div>
+  </button>
+
+  <!-- Chat widget -->
+  <div class="chat-widget" id="chatWidget" aria-label="Rocket Genie chat" aria-hidden="true">
+    <header class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">RG</div>
+        <div class="chat-title">
+          <span class="chat-title-main">Rocket Genie</span>
+          <span class="chat-title-sub">Smart assistant for your app</span>
+        </div>
+      </div>
+      <div class="chat-status-dot" aria-hidden="true"></div>
+      <button class="chat-close-btn" id="chatCloseBtn" aria-label="Close chat">
+        ✕
+      </button>
+    </header>
+
+    <div class="chat-messages" id="chatMessages">
+      <!-- Initial sample messages -->
     </div>
-</section>
 
-<section class="stats">
-    <div class="card">
-        <h2>20,113</h2>
-        <p>Users</p>
-    </div>
-    <div class="card">
-        <h2>35</h2>
-        <p>Exams</p>
-    </div>
-    <div class="card">
-        <h2>5</h2>
-        <p>Live Classes</p>
-    </div>
-    <div class="card">
-        <h2>3,969</h2>
-        <p>Tests</p>
-    </div>
-</section>
+    <div class="chat-error" id="chatError"></div>
 
-<section class="cta">
-    <h2>SAVE YOUR STUDY TIME UPTO 40%</h2>
-    <button>Perform | Analyse | Improve</button>
-</section>
+    <form class="chat-input-area" id="chatForm">
+      <input
+        type="text"
+        id="chatInput"
+        class="chat-input"
+        placeholder="Ask Rocket Genie anything..."
+        autocomplete="off"
+      />
+      <button type="submit" class="chat-send-btn" id="chatSendBtn">
+        <span>Send</span>
+      </button>
+    </form>
+  </div>
 
-<!-- Chat Button -->
-<button class="chat-btn" onclick="toggleChat()">💬</button>
+  <script>
+    (function () {
+      const widget = document.getElementById("chatWidget");
+      const toggleBtn = document.getElementById("chatToggleBtn");
+      const closeBtn = document.getElementById("chatCloseBtn");
+      const form = document.getElementById("chatForm");
+      const input = document.getElementById("chatInput");
+      const messagesEl = document.getElementById("chatMessages");
+      const errorEl = document.getElementById("chatError");
+      const sendBtn = document.getElementById("chatSendBtn");
 
-<!-- Chat Window -->
-<div class="chatbox" id="chatbox">
-    <div class="chat-header">Rocket Genie Assistant</div>
-    <div class="chat-body" id="chatBody">
-        <div class="bot-message">Hello 👋 How can I help you?</div>
-    </div>
-    <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Type your message...">
-        <button onclick="sendMessage()">Send</button>
-    </div>
-</div>
+      const sampleBotReplies = [
+        "Hello! I'm Rocket Genie 🚀 How can I help you?",
+        "I can help you explore features, answer FAQs, or simulate workflows.",
+        "For this demo, I’ll reply with a friendly canned response.",
+        "Try asking about deployments, usage stats, or getting started."
+      ];
 
-<script>
-    function toggleChat() {
-        const chatbox = document.getElementById("chatbox");
-        chatbox.style.display = chatbox.style.display === "flex" ? "none" : "flex";
-    }
+      function appendMessage(text, sender) {
+        const row = document.createElement("div");
+        row.className = "chat-message-row " + sender;
 
-    function sendMessage() {
-        const input = document.getElementById("userInput");
-        const message = input.value.trim();
-        if (message === "") return;
+        const bubble = document.createElement("div");
+        bubble.className = "chat-message-bubble " + sender;
+        bubble.textContent = text;
 
-        const chatBody = document.getElementById("chatBody");
+        const meta = document.createElement("div");
+        meta.className = "chat-message-meta";
+        const timeSpan = document.createElement("span");
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, "0");
+        const mm = String(now.getMinutes()).padStart(2, "0");
+        timeSpan.textContent = hh + ":" + mm;
 
-        const userMsg = document.createElement("div");
-        userMsg.className = "user-message";
-        userMsg.innerText = message;
-        chatBody.appendChild(userMsg);
+        meta.appendChild(timeSpan);
 
+        const wrapper = document.createElement("div");
+        wrapper.style.display = "flex";
+        wrapper.style.flexDirection = "column";
+
+        wrapper.appendChild(bubble);
+        wrapper.appendChild(meta);
+        row.appendChild(wrapper);
+
+        messagesEl.appendChild(row);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function addInitialMessages() {
+        messagesEl.innerHTML = "";
+        appendMessage("Hello! I'm Rocket Genie 🚀 How can I help you?", "bot");
+        appendMessage(
+          "You can ask about product features, quick status summaries, or how to get started.",
+          "bot"
+        );
+      }
+
+      function toggleWidget(openExplicit) {
+        const isOpen = widget.classList.contains("open");
+        const shouldOpen = typeof openExplicit === "boolean" ? openExplicit : !isOpen;
+
+        if (shouldOpen) {
+          widget.classList.add("open");
+          widget.setAttribute("aria-hidden", "false");
+          toggleBtn.setAttribute("aria-label", "Close Rocket Genie chat");
+          setTimeout(() => input && input.focus(), 120);
+        } else {
+          widget.classList.remove("open");
+          widget.setAttribute("aria-hidden", "true");
+          toggleBtn.setAttribute("aria-label", "Open Rocket Genie chat");
+        }
+      }
+
+      function handleUserMessage(text) {
+        if (!text.trim()) {
+          errorEl.textContent = "Please type a message before sending.";
+          return;
+        }
+        errorEl.textContent = "";
+        appendMessage(text.trim(), "user");
         input.value = "";
+        input.focus();
+        simulateBotReply();
+      }
+
+      function simulateBotReply() {
+        sendBtn.disabled = true;
+
+        const reply =
+          sampleBotReplies[Math.floor(Math.random() * sampleBotReplies.length)];
 
         setTimeout(() => {
-            const botMsg = document.createElement("div");
-            botMsg.className = "bot-message";
+          appendMessage(reply, "bot");
+          sendBtn.disabled = false;
+        }, 600 + Math.random() * 600);
+      }
 
-            if (message.toLowerCase().includes("course")) {
-                botMsg.innerText = "We offer Live Classes, Video Courses, and E-Books.";
-            } 
-            else if (message.toLowerCase().includes("exam")) {
-                botMsg.innerText = "We currently have 35 certification exams available.";
-            }
-            else {
-                botMsg.innerText = "Thank you for your message! Our team will assist you shortly.";
-            }
+      toggleBtn.addEventListener("click", () => {
+        toggleWidget();
+        if (widget.classList.contains("open") && messagesEl.children.length === 0) {
+          addInitialMessages();
+        }
+      });
 
-            chatBody.appendChild(botMsg);
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }, 600);
-    }
-</script>
+      closeBtn.addEventListener("click", () => {
+        toggleWidget(false);
+      });
 
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        handleUserMessage(input.value);
+      });
+
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          // Let form submit handler manage it
+        }
+      });
+
+      // Optional: open with initial messages on very small screens when loaded
+      if (window.innerWidth < 480) {
+        // keep closed by default for mobile; comment-in to auto-open:
+        // toggleWidget(true);
+        // addInitialMessages();
+      }
+    })();
+  </script>
 </body>
 </html>
